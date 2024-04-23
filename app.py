@@ -4,7 +4,8 @@ when given a position in fen notation
 """
 
 import random
-from flask import Flask, request
+
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 import chess
@@ -13,26 +14,28 @@ import chess
 app = Flask(__name__)
 CORS(app, origins = 'http://127.0.0.1:5000')
 
-@app.route('/make_random_move', methods = ['POST'])
+@app.route('/make_move', methods = ['POST'])
 def make_random_move():
     """
     Takes a fen position and makes a legal random move and outputs
     the position after the move has been made
     """
-    data = request.json
-    fen = data['fen']
-    new_position = get_new_position(fen)
 
-    return new_position
+    fen = request.json['fen']
+    new_fen = get_new_position(fen)
+
+    return jsonify({"fen": new_fen})
 
 def get_random_move(fen):
     """
     Given a position, this function returns a random legal move
     in uci notation
     """
+
     board = chess.Board(fen)
     moves = [move for move in board.legal_moves]
     random_move = random.choice(moves)
+
     return random_move
 
 def get_new_position(fen):
@@ -44,6 +47,7 @@ def get_new_position(fen):
     move = get_random_move(fen)
     board = chess.Board(fen)
     board.push(move)
+
     return board.fen()
 
 if __name__ == '__main__':
