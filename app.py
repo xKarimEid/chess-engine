@@ -5,13 +5,15 @@ when given a position in fen notation
 
 import random
 from flask import Flask, request
+from flask_cors import CORS
 
 import chess
 
 
 app = Flask(__name__)
+CORS(app, origins = 'http://127.0.0.1:5000')
 
-@app.route('/make_random_move', methods = ['GET'])
+@app.route('/make_random_move', methods = ['POST'])
 def make_random_move():
     """
     Takes a fen position and makes a legal random move and outputs
