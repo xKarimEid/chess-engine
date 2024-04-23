@@ -3,8 +3,8 @@ Simple implementation of a chess engine that returns a random legal move
 when given a position in fen notation
 """
 
-from flask import Flask, request
 import random
+from flask import Flask, request
 
 import chess
 
@@ -44,3 +44,5 @@ def get_new_position(fen):
     board.push(move)
     return board.fen()
 
+if __name__ == '__main__':
+    app.run(host='127.0.0.1', port=8080)
