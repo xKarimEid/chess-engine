@@ -9,6 +9,8 @@ Returns the fen with the best eval
 
 """
 
+
+import chess
 from network.basic_ffwd import FeedForward
 from tokenizer.basic_tokenizer import BasicTokenizer
 
@@ -23,7 +25,10 @@ class Engine:
 
     @staticmethod
     def find_all_positions(fen):
-        pass
+        """
+        """
+        board = chess.Board(fen)
+        legal_moves = 
 
     def find_all_evaluations(self, fens):
         pass

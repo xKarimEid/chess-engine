@@ -14,31 +14,68 @@ class BasicTokenizer:
     """
 
     def __init__(self):
-        self.stoi = {char: idx for char, idx in enumerate(STOI)}
-        self.itos = {idx: char for char, idx in enumerate(STOI)}
+        self.stoi = {char: idx for idx, char in enumerate(STOI)}
+        self.itos = {idx: char for idx, char in enumerate(STOI)}
 
-    def encode(self, fen):
+    def _encode_fen(self, fen):
         """
-        Encodes a fen to fixed length ints of size 71
+        Encodes the first part of fen to a fixed length of 
+        integers. The encodings are padded to a constant length of 71
         """
-        # A fen can have a maximum length of 71
-        padding_length = 71 - len(fen)
-        # Padding a fen to fixed length with 0
-        padded = [0 for _ in range(padding_length)]
-        # Converting chars to ints
-        ids = [self.stoi[char] for char in fen]
-        # Adding the encoded ints to the paddings
+
+        # Disregards castling and move number information
+        parts = fen.split(" ")
+        print(parts)
+        fen_part = ' '.join(parts[:2])
+        print(fen_part)
+        # Convert chars to integers
+        ids = [self.stoi[char] for char in fen_part]
+        # Padds to a constand length
+        padd_length = 71 - len(ids)
+        padded = [0 for _ in range(padd_length)]
+        # Add the paddings to the actual integers
         padded.extend(ids)
 
         return padded
 
+    def encode(self, fens):
+        """
+        Takes in a list of fen and encodes them
+        """
+        # Makes sure fens is a list
+        if isinstance(fens, str):
+            fens = [fens]
+
+        # Store the encoded fens
+        encoded_fens = []
+        # Iterate and encode each fen
+        for fen in fens:
+            encoded = self._encode_fen(fen)
+            encoded_fens.append(encoded)
+
+        return encoded_fens
+
     def decode(self, ids):
         """
-        Takes in encoded fen and returns the decoded fen
+        Takes a list of encoded positions and decodes them
         """
-        # Removing 0 ints as they are paddings
-        chars = [self.itos[idx] for idx in ids if idx != 0]
-        # Joining chars together to form the fen
-        fen = ''.join(chars)
 
-        return fen
+        assert isinstance(ids[0], list)
+
+        decoded_fens = []
+        # Decode each integer except for the padding integer
+        for encoding in ids:
+            chars = [self.itos[idx] for idx in encoding if idx != 0]
+            decoded_fens.append(chars)
+
+        fens = []
+        # Join the chars of the fen together
+        for fen in decoded_fens:
+            f = ''.join(fen)
+            fens.append(f)
+
+        # Return a single fen string if only one fen is present
+        if len(fens) == 1:
+            return fens[0]
+
+        return fens
