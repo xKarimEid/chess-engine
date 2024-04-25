@@ -1,7 +1,7 @@
 """
 Basic ffwd model
 
-context length 65?
+context length 71
 
 Takes in a fen ->
 fen is int encoded by using a standard encoding method
@@ -20,6 +20,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+# Network configuration settings
 N_CHARS = 21
 N_EMBED = 8
 N_BINS = 64
@@ -40,9 +41,26 @@ class FeedForward(nn.Module):
         Forward function and get the probs
         """
 
-        x = self.emb(x)
-        x = self.flatten(x)
-        logits = self.hidden(x)
-        probs = F.softmax(logits, dim = -1)
+        x = self.emb(x) # B, T, C
+        x = self.flatten(x) # B, T*C
+        logits = self.hidden(x) # B, N_BINS
+        probs = F.softmax(logits, dim = -1) # B, N_BINS
 
         return probs
+
+    def get_best_position_idx(self, x):
+        """
+        We need to find the position with the highest evaluation
+        from all given positions. To do this we first need to find the 
+        binned evaluation for each position and then choose the position with the
+        highest binned evaluation
+        """
+
+        # Find probs for each position
+        probs = self.forward(x) # B, n_bins
+        # Assign position evaluation based on the highest probability
+        binned_eval = torch.argmax(probs, dim = 1)
+        # Find the position idx with the best evaluation (highest binned evaluation)
+        best_position = torch.argmax(binned_eval)
+
+        return best_position
