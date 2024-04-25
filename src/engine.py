@@ -9,12 +9,13 @@ Returns the fen with the best eval
 
 """
 
+
 import torch
 
 import chess
 
-from network.basic_ffwd import FeedForward
-from tokenizer.basic_tokenizer import BasicTokenizer
+from src.network.basic_ffwd import FeedForward
+from src.tokenizer.basic_tokenizer import BasicTokenizer
 
 class Engine:
     """
@@ -48,7 +49,7 @@ class Engine:
         x = torch.tensor(encodings)
         return x
 
-    def get_best_position_idx(self, fen):
+    def get_best_position(self, fen):
         """
         Describe function
         """

@@ -21,7 +21,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 # Network configuration settings
-N_CHARS = 21
+N_CHARS = 25
 N_EMBED = 8
 N_BINS = 64
 CONTEXT_LENGTH = 71
