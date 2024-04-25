@@ -25,9 +25,7 @@ class BasicTokenizer:
 
         # Disregards castling and move number information
         parts = fen.split(" ")
-        print(parts)
         fen_part = ' '.join(parts[:2])
-        print(fen_part)
         # Convert chars to integers
         ids = [self.stoi[char] for char in fen_part]
         # Padds to a constand length
