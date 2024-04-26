@@ -5,7 +5,7 @@ padds the output to a specific length
 """
 
 
-# All possible characters in a fen adding, '.' for padding purposes
+# All possible characters in a fen, adding '.' for padding purposes
 STOI = '. -/12345678BKNPQRbknpqrw'
 
 class BasicTokenizer:
