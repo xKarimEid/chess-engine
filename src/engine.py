@@ -14,8 +14,8 @@ import torch
 
 import chess
 
-from src.network.transformer_2 import Network
-from src.tokenizer.basic_tokenizer_2 import BasicTokenizer
+from src.network.transformer import Network
+from src.tokenizer.basic_tokenizer import BasicTokenizer
 
 model_dir = os.path.join(os.path.dirname(__file__), f'trained_model/model_test.pkl')
 
