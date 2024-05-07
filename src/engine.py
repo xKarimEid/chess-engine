@@ -9,13 +9,20 @@ Returns the fen with the best eval
 
 """
 
-
+import os 
 import torch
 
 import chess
 
-from src.network.basic_ffwd import FeedForward
-from src.tokenizer.basic_tokenizer import BasicTokenizer
+from src.network.transformer_2 import Network
+from src.tokenizer.basic_tokenizer_2 import BasicTokenizer
+
+model_dir = os.path.join(os.path.dirname(__file__), f'trained_model/model_test.pkl')
+
+checkpoint = torch.load(model_dir, map_location=torch.device('cpu'))
+
+model = Network()
+model.load_state_dict(checkpoint['model'])
 
 class Engine:
     """
@@ -23,7 +30,7 @@ class Engine:
     """
 
     def __init__(self):
-        self.model = FeedForward()
+        self.model = model
         self.tokenizer = BasicTokenizer()
 
     @staticmethod
@@ -55,6 +62,9 @@ class Engine:
         """
         positions = self.get_all_positions_from_current(fen)
         encoded_positions = self.tokenize_positions(positions)
+        print(type(encoded_positions),encoded_positions.shape)
+        encoded_positions = encoded_positions.long()
+
         best_position_idx = self.model.get_best_position_idx(encoded_positions)
 
         return positions[best_position_idx]
