@@ -21,7 +21,7 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 class AttentionHead(nn.Module):
     """
-    Add description here
+    Basic implementation of self attention
     """
 
     def __init__(self):
@@ -33,7 +33,7 @@ class AttentionHead(nn.Module):
 
     def forward(self, x):
         """
-        Add description here
+        Forward function for self attention
         """
 
         B, T, C = x.shape
@@ -51,7 +51,7 @@ class AttentionHead(nn.Module):
 
 class MultiHeadAttention(nn.Module):
     """
-    Add docstring
+    Basic implementation of multihead attention
     """
 
     def __init__(self):
@@ -63,7 +63,8 @@ class MultiHeadAttention(nn.Module):
 
     def forward(self, x):
         """
-        Add description here
+        Forward x through all the attention heads and concatenate the results along the
+        channel dimension
         """
         x = torch.cat([h(x) for h in self.sa_heads], dim=-1)
         x = self.proj(x)
@@ -71,7 +72,7 @@ class MultiHeadAttention(nn.Module):
 
 class FFWD(nn.Module):
     """
-    Add docstring
+    A basic feed forward module to use after multihead attention
     """
 
     def __init__(self):
@@ -92,7 +93,8 @@ class FFWD(nn.Module):
 
 class Block(nn.Module):
     """
-    Add docstring
+    A block stitching together layer norms, 
+    multihead attention and feedforward modules
     """
 
     def __init__(self):
@@ -103,16 +105,15 @@ class Block(nn.Module):
         self.ln2 = nn.LayerNorm(N_EMBED)
 
     def forward(self, x):
-        """
-        Add doc
-        """
+
         x = self.mh_attention(self.ln1(x)) + x
         x = self.ffwd(self.ln2(x)) + x
         return x
 
 class Network(nn.Module):
     """
-    Add docstring
+    Creating the transformer network by initializing the embedding
+    matrices, blocks and the head
     """
     def __init__(self):
         super().__init__()
@@ -129,7 +130,8 @@ class Network(nn.Module):
 
     def forward(self, x, targets = None):
         """
-        Add docstring
+        Forwards tokenized FEN notations and outputs the logits
+        for each class
         """
         # x is (B, T)
         piece_embed = self.embed(x) # (B, T, N_EMBED)

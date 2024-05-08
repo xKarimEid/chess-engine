@@ -1,25 +1,22 @@
-This is a no search based chess-engine which takes a position and 
-predicts its evaluation. 
-
 # Purpose
 
-This repo shows how a tokenizer and a trained neural network can be used together as a chess engine. 
+This repo is inspired by capablanca when he was reportedly asked how many moves ahead do you calculate, to which he replies: “only one, but it is always the best one”
 
-Given a position in FEN notation, it can be tokenized and then fed into a neural network to predict the winning percentage of the given position for the player whos turn it is.
-
-From a given position, all possible positions are found by making all legal moves in the position. The list of FEN positions is tokenized by the tokenizer. The tokenized fens are then forwarded through the neural network. For each position, the output of the neural network is from 0 to 63. Where 0 is loosing and 63 is winning. The binned percentages are in the perspective of the next person to play.
-
-No search based. Looks at a position and finds the best move by evaluating all positions one move ahead.
-This is inspired by capablanca when he was asked how many moves ahead do you calculate, to which he replies: “only one, but it is always the best one”
+A tokenizer and a trained neural network can be used together to create a chess engine. 
+The chess-engine is a no search based engine. This means that it doesnt create a monte carlo tree searching many
+moves ahead to decide which move is the best move. The way this chess-engine works is by simply looking at all
+the positions one move ahead and choosing the move with the highest winning chances.
 
 # Chess Engine
+
+From a given position, all possible positions are found by making all legal moves in the position. The list of FEN positions is tokenized by the tokenizer. The tokenized fens are then forwarded through the neural network. For each position, the output of the neural network is from 0 to 63. Where 0 is loosing and 63 is winning. The binned percentages are in the perspective of the next person to play.
 
 python-chess library is used for finding all legal moves in a given position.
 All legal moves result in different FEN positions.
 
-Tokenizer: Tokenizer takes in a list of FEN notations and encodes them to integers
+1) Tokenizer takes in a list of FEN notations and encodes them to integers
 
-Neural network: Assigns each position to a specific category. There are 64 different categories where the first
+2) Neural network: Assigns each position to a specific category. There are 64 different categories where the first
 category describes a completely losing position and the last category is for completely winning positions.
 
 # Tokenizer
