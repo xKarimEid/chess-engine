@@ -1,18 +1,7 @@
 """
-Basic ffwd model
-
-context length 71
-
-Takes in a fen ->
-fen is int encoded by using a standard encoding method
-('p':1 and so forth)
-no positional encoding
-padded to fixed length
-
-embedding matrix
-dense hidden layer with activation
-final output layer as binn
-
+Implementation of a basic Feed forward model for evaluating
+chess positions. This is just for demonstrating purposes. A better
+network is implemented on my other repo called chess-vision.
 """
 
 

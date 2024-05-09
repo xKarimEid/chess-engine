@@ -1,7 +1,7 @@
 """
-Tokenizer has the set of string to int
-padds the output to a specific length
-
+Tokenizer for mapping a position in FEN notation to ints. The tokenizer
+takes the positional information from the notation and disregards castling
+and move number informationl. 
 """
 
 

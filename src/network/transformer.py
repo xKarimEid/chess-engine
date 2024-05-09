@@ -1,5 +1,7 @@
 """
-Add docstring
+Here I create a basic transformer architecture. The implementation
+is simplified and not parallelized. I have created
+a more parallelized implementation on my other repo called chess-vision.
 """
 
 import torch
@@ -15,8 +17,6 @@ N_BINS = 64
 N_BLOCKS = 4
 DROPOUT = 0.05
 CONTEXT_SIZE = 68
-
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 
 class AttentionHead(nn.Module):
@@ -44,7 +44,6 @@ class AttentionHead(nn.Module):
         # The communication between the nodes
         wei = keys @ queries.transpose(-2, -1) * C**-0.5 # (B, T, T)
         wei = F.softmax(wei, dim = -1) # (B, T, T)
-        #wei = self.dropout(wei)
 
         out = wei @ values # (B, T, HEAD_SIZE)
         return out
@@ -81,13 +80,9 @@ class FFWD(nn.Module):
             nn.Linear(N_EMBED, N_EMBED*4, bias = True),
             nn.ReLU(),
             nn.Linear(N_EMBED*4, N_EMBED, bias = True),
-            #nn.Dropout(DROPOUT)
             )
 
     def forward(self, x):
-        """
-        Add docs
-        """
 
         return self.net(x)
 
@@ -108,6 +103,7 @@ class Block(nn.Module):
 
         x = self.mh_attention(self.ln1(x)) + x
         x = self.ffwd(self.ln2(x)) + x
+
         return x
 
 class Network(nn.Module):
@@ -115,6 +111,7 @@ class Network(nn.Module):
     Creating the transformer network by initializing the embedding
     matrices, blocks and the head
     """
+
     def __init__(self):
         super().__init__()
         # Chess piece embedding
@@ -133,6 +130,7 @@ class Network(nn.Module):
         Forwards tokenized FEN notations and outputs the logits
         for each class
         """
+
         # x is (B, T)
         piece_embed = self.embed(x) # (B, T, N_EMBED)
         positional_embed = self.positional_embedding(torch.arange(CONTEXT_SIZE, device = device))
